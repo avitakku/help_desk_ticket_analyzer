@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Help Desk Ticket Analyzer</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="#instructions" class="nav-link">Instructions</a></li>
+                <li><a href="#analyzer" class="nav-link">Analyzer</a></li>
+                <li class="logo"><img src="https://resumeverifierstorage.blob.core.windows.net/images/LCG_LOGO_Color Logo.png" alt="Website Logo"></li>
+            </ul>
+        </nav>
+        <div id="reportDownloader">
+            <div id="instructions" class="section">
+                <h1>Instructions</h1>
+                <form>
+                    <div class="form-group">
+                        <p style="margin-right: auto;"><strong><u>File specifications:</strong></u></p>
+                        <p style="margin-right: auto;">Ensure that the column headers of your excel file are as follows: <br> 
+                            <li style="margin-right: auto;">Technician Name: 'assigned_to'</li>
+                            <li style="margin-right: auto;">Short Description: 'short_description'</li>
+                            <li style="margin-right: auto;">Incident Number: 'number'</li>
+                            <li style="margin-right: auto;">Work Notes: 'comments_and_work_notes'</li>
+                            <li style="margin-right: auto;">Close Notes: 'close_notes'</li>
+                            <li style="margin-right: auto;">Priority: 'priority'</li>
+                        </p>
+                    </div>
+                </form>
+            </div>
+            <div id="analyzer" class="section" style="display: none;">
+                <h1>Help Desk Ticket Analyzer</h1>
+                <form id="uploadForm" method="POST" enctype="multipart/form-data" action="/upload">
+                    <div class="form-group">
+                        <label for="input_form" class="custom-file-upload">Upload ticket data (xlsx)</label>
+                        <input type="file" id="input_form" name="input_form" accept=".xlsx">
+                        <div class="message" id="input_form_message"></div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Upload File">
+                    </div>
+                    <div id="error_message" style="display: none;"></div>
+                </form> 
+                <form id="reportForm" style="display: none;" method="POST" enctype="multipart/form-data" action="/generate">
+                    <div class="form-group">
+                        <label for="worker_input">Technician name:</label>
+                        <select id="worker_input" name="worker_input"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="size_input">Report size:</label>
+                        <input type="number" id="size_input" name="size_input" min="1" max="5">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Generate Report">
+                    </div>
+                </form>
+            </div>
+        </div>     
+        <script src="/static/js/script.js"></script>
+    </body>
+</html>
+
+

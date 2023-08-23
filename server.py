@@ -14,9 +14,6 @@ from io import BytesIO
 
 app = Flask(__name__)
 
-#app.config['SESSION_TYPE'] = 'filesystem'
-#Session(app)
-
 @app.route('/')
 def home():
     #session.clear()

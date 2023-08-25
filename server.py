@@ -1,10 +1,10 @@
 from functions_file import *
 import pandas as pd
 
-from flask import Flask, request, jsonify, render_template, session, send_file
+from flask import Flask, request, jsonify, render_template, send_file
+from flask_socketio import SocketIO
 
 from io import BytesIO
-#from flask_session import Session
 
 # Generate report for one particular technician
 
@@ -13,6 +13,7 @@ from io import BytesIO
 # size: length of number of tickets we want to include by worker
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 @app.route('/')
 def home():
@@ -64,8 +65,10 @@ def get_report(dataframe, worker, size):
 
     report['Customer contact'] = customer_contact_exists
     report['Customer contact reasoning'] = customer_contact_rzn
+    report['Customer contact concur:']=""
 
     print('Customer contact \n')
+    socketio.emit('message', {'data': 'Checking if there is customer contact...'})
 
     # troubleshooting: a list where each element is yes/no/unsure depending on whether 
     # or not GPT thinks the technician clearly included troubleshooting steps
@@ -75,8 +78,10 @@ def get_report(dataframe, worker, size):
 
     report['Troubleshooting Steps'] = troubleshooting
     report['Troubleshooting Steps Reasoning'] = troubleshooting_rzn
+    report['Troubleshooting Steps concur:']=""
 
     print('troubleshooting steps \n')
+    socketio.emit('message', {'data': 'Checking if there are adequate troubleshooting steps...'})
 
     # ts_results: a list where each element is yes/no/unsure depending on whether 
     # or not GPT thinks the technician clearly included the results of each troubleshooting step
@@ -86,8 +91,10 @@ def get_report(dataframe, worker, size):
 
     report['Troubleshooting Results'] = ts_results
     report['Troubleshooting Results Reasoning'] = ts_results_rzn
+    report['Troubleshooting Results concur: ']=""
 
     print('troubleshooting results \n')
+    socketio.emit('message', {'data': 'Checking if there are adequate troubleshooting results...'})
 
     # meaningful_updates: a list where each element is yes/no/unsure depending on whether 
     # or not GPT thinks the technician's work notes contained meaningful updates
@@ -97,8 +104,10 @@ def get_report(dataframe, worker, size):
 
     report['Meaningful Updates'] = meaningful_updates
     report['Meaningful Updates Reasoning'] = meaningful_updates_rzn
+    report['Meaningful Updates concur: ']=""
 
     print('meaningful updates \n')
+    socketio.emit('message', {'data': 'Checking if there are meaningful updates...'})
 
     # timely_updates: a list where each element is yes/no/unsure depending on whether 
     # or not GPT thinks the technician's work notes contained timely updates
@@ -108,6 +117,8 @@ def get_report(dataframe, worker, size):
 
     report['Timely Updates'] = timely_updates
     report['Timely Updates Reasoning'] = timely_updates_rzn
+    report['Timely Updates Concur:']=""
+    socketio.emit('message', {'data': 'Checking if there are timely updates...'})
 
     print('timely updates \n')
 
@@ -137,8 +148,10 @@ def get_report(dataframe, worker, size):
 
     report['Proper Escalation Notes']=proper_esc_notes_yn
     report['Proper Escalation Notes Reasoning'] = proper_esc_notes
+    report['Proper Escalation Notes Concur:']=""
 
     print('proper esc notes \n')
+    socketio.emit('message', {'data': 'Checking if there are proper escalation notes...'})
 
     # close_notes_yn: list where each element is yes/no/unsure if the ticket was escalated based on 
     # whether or not GPT thinks the closure notes were clear 
@@ -149,8 +162,10 @@ def get_report(dataframe, worker, size):
 
     report['Close Notes'] = close_notes_yn
     report['Close Notes Reasoning'] = close_notes_rzn
+    report['Close Notes Concur:']=""
 
     print('close notes \n')
+    socketio.emit('message', {'data': 'Checking if close notes are thorough...'})
 
     return report, work_notes, close_notes
 
@@ -192,4 +207,4 @@ def generate_report():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app,debug=True)

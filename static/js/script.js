@@ -9,7 +9,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const analyzerLink = document.querySelector('a[href="#analyzer"]');
   const instructionsSection = document.getElementById('instructions');
   const analyzerSection = document.getElementById('analyzer');
+  const socket = io.connect();
 
+  socket.on('message', (message) => {
+    try {
+      console.log(message.data);
+      var messagesContainer = document.getElementById('messages');
+      messagesContainer.innerHTML = ''; // Clear previous messages
+      var messageElement = document.createElement('p');
+      messageElement.textContent = message.data;
+      messagesContainer.appendChild(messageElement);
+    } catch (error) {
+      console.log(error); // Log any errors to the console
+    }
+  });
+  
   instructionsSection.style.display = 'none';
   analyzerSection.style.display = 'block';
 

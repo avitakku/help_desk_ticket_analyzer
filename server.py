@@ -61,6 +61,7 @@ def get_report(dataframe, worker, size):
     # or not GPT thinks there was customer contact
     # customer_contact_rzn: GPT's reasoning behind its above answer
 
+    socketio.emit('message', {'data': 'Checking if there is customer contact...'})
     customer_contact_exists, customer_contact_rzn = get_customer_contact(work_notes)
 
     report['Customer contact'] = customer_contact_exists
@@ -68,12 +69,12 @@ def get_report(dataframe, worker, size):
     report['Customer contact concur:']=""
 
     print('Customer contact \n')
-    socketio.emit('message', {'data': 'Checking if there is customer contact...'})
 
     # troubleshooting: a list where each element is yes/no/unsure depending on whether 
     # or not GPT thinks the technician clearly included troubleshooting steps
     # troubleshooting_rzn: GPT's reasoning behind its above answer
 
+    socketio.emit('message', {'data': 'Checking if there are adequate troubleshooting steps...'})
     troubleshooting, troubleshooting_rzn = get_troubleshooting_steps(work_notes)
 
     report['Troubleshooting Steps'] = troubleshooting
@@ -81,12 +82,12 @@ def get_report(dataframe, worker, size):
     report['Troubleshooting Steps concur:']=""
 
     print('troubleshooting steps \n')
-    socketio.emit('message', {'data': 'Checking if there are adequate troubleshooting steps...'})
-
+    
     # ts_results: a list where each element is yes/no/unsure depending on whether 
     # or not GPT thinks the technician clearly included the results of each troubleshooting step
     # ts_results_rzn: GPT's reasoning behind its above answer
 
+    socketio.emit('message', {'data': 'Checking if there are adequate troubleshooting results...'})
     ts_results, ts_results_rzn = get_ts_results(work_notes)
 
     report['Troubleshooting Results'] = ts_results
@@ -94,12 +95,12 @@ def get_report(dataframe, worker, size):
     report['Troubleshooting Results concur: ']=""
 
     print('troubleshooting results \n')
-    socketio.emit('message', {'data': 'Checking if there are adequate troubleshooting results...'})
 
     # meaningful_updates: a list where each element is yes/no/unsure depending on whether 
     # or not GPT thinks the technician's work notes contained meaningful updates
     # meaningful_updates_rzn: GPT's reasoning behind its above answer
 
+    socketio.emit('message', {'data': 'Checking if there are meaningful updates...'})
     meaningful_updates, meaningful_updates_rzn = get_meaningful_updates(work_notes)
 
     report['Meaningful Updates'] = meaningful_updates
@@ -107,18 +108,17 @@ def get_report(dataframe, worker, size):
     report['Meaningful Updates concur: ']=""
 
     print('meaningful updates \n')
-    socketio.emit('message', {'data': 'Checking if there are meaningful updates...'})
 
     # timely_updates: a list where each element is yes/no/unsure depending on whether 
     # or not GPT thinks the technician's work notes contained timely updates
     # timely_updates_rzn: GPT's reasoning behind its above answer
 
+    socketio.emit('message', {'data': 'Checking if there are timely updates...'})
     timely_updates, timely_updates_rzn = get_timely_updates(work_notes, priorities)
 
     report['Timely Updates'] = timely_updates
     report['Timely Updates Reasoning'] = timely_updates_rzn
     report['Timely Updates Concur:']=""
-    socketio.emit('message', {'data': 'Checking if there are timely updates...'})
 
     print('timely updates \n')
 
@@ -144,6 +144,7 @@ def get_report(dataframe, worker, size):
     # proper_esc_notes: list where each element is N/A if the corresponding ticket was NOT escalated
     # or contains the reason for why GPT gave the above answer if the ticket was escalated
     
+    socketio.emit('message', {'data': 'Checking if there are proper escalation notes...'})
     proper_esc_notes_yn, proper_esc_notes = get_esc_notes(escalated_nums, work_notes)
 
     report['Proper Escalation Notes']=proper_esc_notes_yn
@@ -151,13 +152,13 @@ def get_report(dataframe, worker, size):
     report['Proper Escalation Notes Concur:']=""
 
     print('proper esc notes \n')
-    socketio.emit('message', {'data': 'Checking if there are proper escalation notes...'})
 
     # close_notes_yn: list where each element is yes/no/unsure if the ticket was escalated based on 
     # whether or not GPT thinks the closure notes were clear 
 
     # closure_notes_rzn: list where each element is the reason for why GPT gave the above answer 
 
+    socketio.emit('message', {'data': 'Checking if close notes are thorough...'})
     close_notes_yn, close_notes_rzn = get_close_notes(close_notes)
 
     report['Close Notes'] = close_notes_yn
@@ -165,7 +166,7 @@ def get_report(dataframe, worker, size):
     report['Close Notes Concur:']=""
 
     print('close notes \n')
-    socketio.emit('message', {'data': 'Checking if close notes are thorough...'})
+    socketio.emit('message', {'data': 'Done!'})
 
     return report, work_notes, close_notes
 

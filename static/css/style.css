@@ -17,7 +17,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: var(--background-color);
-    color: var(--background-color);
+    color: var(--powder-blue);
 }
 
 h1 {
@@ -162,4 +162,15 @@ nav ul li.logo img {
 nav ul li.logo {
     margin-left: auto;
     padding-top: 5px; 
+}
+
+#messages{
+    text-align: center;
+}
+
+#messages p {
+    margin: 5px;
+    padding: 5px;
+    border-bottom: 1px solid var(--secondary-color);
+    font-family: var(--font-secondary);
 }
